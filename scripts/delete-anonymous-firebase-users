@@ -1,0 +1,38 @@
+#!/usr/bin/env ts-node
+
+import * as AWS from "aws-sdk";
+import * as firebaseAdmin from "firebase-admin";
+
+AWS.config.update({ region: process.env.AWS_REGION });
+const ssm = new AWS.SSM();
+
+const initialize = async () => {
+  const { FIREBASE_PROJECT_ID } = process.env;
+  const params = {
+    Name: `/FirebaseMigrator/${FIREBASE_PROJECT_ID}/FirebaseServiceAccount`,
+    WithDecryption: true
+  };
+  const res = await ssm.getParameter(params).promise();
+  firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(JSON.parse(res.Parameter!.Value!))
+  });
+};
+
+async function listAllUsers(nextPageToken?: any) {
+  const res = await firebaseAdmin.auth().listUsers(1000, nextPageToken);
+  const userIds = res.users
+    .filter((userRecord) => !userRecord.email)
+    .map((userRecord) => userRecord.uid);
+  await firebaseAdmin.auth().deleteUsers(userIds);
+  if (res.pageToken) {
+    listAllUsers(res.pageToken);
+  }
+}
+
+async function main() {
+  await initialize();
+  await listAllUsers();
+  process.exit();
+}
+
+main().catch(console.error);

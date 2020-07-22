@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "nodejs",
+  "version": "1.0.0",
+  "dependencies": {
+    "@aws-cdk/aws-appsync": "^1.69.0",
+    "aws-sdk": "^2.776.0",
+    "firebase": "^7.24.0",
+    "firebase-admin": "^9.2.0",
+    "pluralize": "^8.0.0"
+  }
+}

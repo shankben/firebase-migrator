@@ -1,0 +1,9 @@
+{
+  "app": "node dist/bin/firebase-migrator.js",
+  "requireApproval": "never",
+  "context": {
+    "@aws-cdk/core:newStyleStackSynthesis": true,
+    "@aws-cdk/core:stackRelativeExports": true,
+    "@aws-cdk/core:enableStackNameDuplicates": true
+  }
+}

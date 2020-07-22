@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "lib": [
+      "es2018",
+      "es2019",
+      "es2020",
+      "esnext"
+    ],
+    "module": "commonjs",
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "target": "es2018",
+    "typeRoots": ["./node_modules/@types"],
+    "outDir": "dist"
+  },
+  "include": [
+    "bin/**/*.ts",
+    "src/**/*.ts",
+    "lib/**/*.ts",
+    "secrets/*"
+  ],
+  "exclude": [
+    "cdk.out",
+    "src/fargate/**"
+  ]
+}
