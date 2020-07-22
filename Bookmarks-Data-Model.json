@@ -1,0 +1,289 @@
+{
+  "ModelName": "Bookmarks Data Model",
+  "ModelMetadata": {
+    "Author": "Amazon Web Services, Inc.",
+    "DateCreated": "May 1, 2020, 11:00 AM",
+    "DateLastModified": "Jul 22, 2020, 01:34 PM",
+    "Description": "This model is about storing URL bookmarks for customers.\n\nEven if the use case is relatively simple, there are still many interesting considerations to make. A customer can have many bookmarks and a bookmark can be for many customers. So we have to model a “many to many” relationship. A first approach is to create two tables, one for customers, and one for bookmarks. This first approach, using two tables, definitely works. But when customers log in to display their bookmarks each time, the application runs two requests to DynamoDB, the first to get the customer data in the Customer table, the second to get the customer bookmarks in the Bookmark table.\n\nThis is something quite common when moving a relational data model to NoSQL without changes: table joins are “unrolled” into multiple requests to the database. This is not efficient, especially if you start to have three or more requests instead of one. To be efficient we store the customer information and the customer's bookmarks in the same table as a collection of related items and use facets to visualize different kinds of data you store in the same table.\n\nIn this model the primary key of the CustomerBookmark table is composite: the partition key is always the customerId, while the sort key can hold different values. We use the sort key to store URL for bookmarks, or a concatenated string such as “CUST#” followed by customerId for customer data. In this way, the sort key is an overloaded attribute with a generic name “sk”.\n\nAccess patterns that this model is meant for are the following.\n    * A single query by customerId can now return customer data as well as bookmarks.\n    * A query ByEmail index returns customer data by email address. Note that bookmarks are not retrieved by this index.\n    * A query ByUrl index gets bookmarks data by URL. Note that we have customerId as the sort key for the index because the same URL can be bookmarked by multiple customers.\n    * A query ByCustomerFolder index gets bookmarks by folder for each customer\n\nYou can use the Customer facet to visualize all the customer information and the Bookmark facets to see data for all bookmarks. Note that facet is a virtual construct in NoSQL Workbench and not a functional construct in DynamoDB itself.\n",
+    "Version": "1.0"
+  },
+  "DataModel": [
+    {
+      "TableName": "CustomerBookmark",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "customerId",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "sk",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "createDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "updateDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "email",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "fullName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "userPreferences",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "folder",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "title",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "description",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "url",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "Customer",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "customerId",
+            "SortKeyAlias": "type"
+          },
+          "TableData": [
+            {
+              "customerId": {
+                "S": "123"
+              },
+              "sk": {
+                "S": "CUST#123"
+              },
+              "email": {
+                "S": "shirley@example.net"
+              },
+              "fullName": {
+                "S": "Shirley Rodriguez"
+              },
+              "userPreferences": {
+                "S": "{“language”: “en”, “sort”: “date”, “sortDirection”: “ascending”}"
+              }
+            },
+            {
+              "customerId": {
+                "S": "321"
+              },
+              "sk": {
+                "S": "CUST#321"
+              },
+              "email": {
+                "S": "zhang@example.net"
+              },
+              "fullName": {
+                "S": "Zhang Wei"
+              },
+              "userPreferences": {
+                "S": "{“language”: “zh”, “sort”: “rating”, “sortDirection”: “descending”}"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "email",
+            "fullName",
+            "userPreferences"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "Bookmark",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "customerId",
+            "SortKeyAlias": "url"
+          },
+          "TableData": [
+            {
+              "customerId": {
+                "S": "123"
+              },
+              "sk": {
+                "S": "https://aws.amazon.com"
+              },
+              "createDate": {
+                "S": "2020-03-25T09:16:46-07:00"
+              },
+              "updateDate": {
+                "S": "2020-03-25T09:16:46-07:00"
+              },
+              "folder": {
+                "S": "Cloud"
+              },
+              "title": {
+                "S": "AWS"
+              },
+              "description": {
+                "S": "Amazon Web Services"
+              },
+              "url": {
+                "S": "https://aws.amazon.com"
+              }
+            },
+            {
+              "customerId": {
+                "S": "123"
+              },
+              "sk": {
+                "S": "https://console.aws.amazon.com"
+              },
+              "createDate": {
+                "S": "2020-03-25T09:16:43-07:00"
+              },
+              "updateDate": {
+                "S": "2020-03-25T09:16:43-07:00"
+              },
+              "folder": {
+                "S": "Cloud"
+              },
+              "title": {
+                "S": "AWS Console"
+              },
+              "description": {
+                "S": "Web console"
+              },
+              "url": {
+                "S": "https://console.aws.amazon.com"
+              }
+            },
+            {
+              "customerId": {
+                "S": "321"
+              },
+              "sk": {
+                "S": "https://aws.amazon.com"
+              },
+              "createDate": {
+                "S": "2020-03-25T09:16:45-07:00"
+              },
+              "updateDate": {
+                "S": "2020-03-25T09:16:45-07:00"
+              },
+              "folder": {
+                "S": "Tools"
+              },
+              "title": {
+                "S": "AWS"
+              },
+              "description": {
+                "S": "Amazon Web Services"
+              },
+              "url": {
+                "S": "https://aws.amazon.com"
+              }
+            },
+            {
+              "customerId": {
+                "S": "321"
+              },
+              "sk": {
+                "S": "https://docs.aws.amazon.com"
+              },
+              "createDate": {
+                "S": "2020-03-25T09:16:46-07:00"
+              },
+              "updateDate": {
+                "S": "2020-03-25T09:16:46-07:00"
+              },
+              "folder": {
+                "S": "Docs"
+              },
+              "title": {
+                "S": "AWS Docs"
+              },
+              "description": {
+                "S": "Documentation"
+              },
+              "url": {
+                "S": "https://docs.aws.amazon.com"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "createDate",
+            "updateDate",
+            "folder",
+            "title",
+            "description",
+            "url"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "ByEmail",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "email",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        },
+        {
+          "IndexName": "ByUrl",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "url",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "customerId",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        },
+        {
+          "IndexName": "ByCustomerFolder",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "customerId",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "folder",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    }
+  ]
+}

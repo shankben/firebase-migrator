@@ -1,0 +1,18 @@
+{
+  "name": "firebase-migrator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.718.0",
+    "firebase-admin": "^9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0"
+  }
+}
