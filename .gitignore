@@ -1,4 +1,9 @@
-keys/
+cdk.context.json
+secrets/
+assets/fargate/firebase-listener-proxy/scripts/
+dist/
+
+!jest.config.js
 *.d.ts
 node_modules
 

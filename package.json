@@ -1,18 +1,37 @@
 {
   "name": "firebase-migrator",
   "version": "1.0.0",
-  "description": "",
-  "main": "test.js",
+  "license": "Apache-2.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "aws-sdk": "^2.718.0",
-    "firebase-admin": "^9.0.0"
+    "build": "./scripts/build.sh",
+    "clean": "./scripts/clean.sh",
+    "postinstall": "./scripts/post-install.sh"
   },
   "devDependencies": {
-    "eslint": "^7.5.0"
+    "@aws-cdk/assert": "^1.87.1",
+    "@aws-cdk/aws-appsync": "^1.87.1",
+    "@aws-cdk/aws-ecs": "^1.87.1",
+    "@aws-cdk/aws-ecs-patterns": "^1.87.1",
+    "@aws-cdk/aws-lambda-event-sources": "^1.87.1",
+    "@aws-cdk/aws-sns": "^1.87.1",
+    "@aws-cdk/aws-sns-subscriptions": "^1.87.1",
+    "@aws-cdk/aws-sqs": "^1.87.1",
+    "@aws-cdk/aws-stepfunctions": "^1.87.1",
+    "@aws-cdk/aws-stepfunctions-tasks": "^1.87.1",
+    "@aws-cdk/core": "^1.87.1",
+    "@aws-cdk/custom-resources": "^1.87.1",
+    "@types/aws-lambda": "^8.10.71",
+    "@types/node": "^14.14.22",
+    "@types/pluralize": "0.0.29",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "aws-amplify": "^3.3.16",
+    "aws-sdk": "^2.834.0",
+    "eslint": "^7.19.0",
+    "firebase": "^8.2.5",
+    "firebase-admin": "^9.4.2",
+    "pluralize": "^8.0.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   }
 }
