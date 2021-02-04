@@ -18,7 +18,8 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "target": "es2019",
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "outDir": "./dist"
   },
   "include": [
     "**/*.ts"

@@ -64,12 +64,12 @@ export default class FirestoreSyncStack extends Stack {
     const queue = new Queue(this, "Queue", {
       queueName: "FirebaseSyncQueue",
       visibilityTimeout: Duration.minutes(6 * this.readerTimeoutMinutes),
-      deadLetterQueue: {
-        maxReceiveCount: 3,
-        queue: new Queue(this, "DLQ", {
-          queueName: "FirebaseSyncDeadLetterQueue"
-        })
-      }
+      // deadLetterQueue: {
+      //   maxReceiveCount: 3,
+      //   queue: new Queue(this, "DLQ", {
+      //     queueName: "FirebaseSyncDeadLetterQueue"
+      //   })
+      // }
     });
 
     const lambdaProps = {

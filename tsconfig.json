@@ -29,11 +29,11 @@
   "include": [
     "bin/**/*.ts",
     "lib/**/*.ts",
-    "src/lambda/**/*.ts"
+    "assets/lambda/**/*.ts"
   ],
   "exclude": [
     "dist",
     "cdk.out",
-    "src/fargate/**"
+    "assets/fargate/**"
   ]
 }

@@ -1,10 +1,13 @@
 import fs from "fs";
 import { Resource } from "@google-cloud/resource";
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
-import AWS from "aws-sdk";
+import {
+  SSMClient,
+  GetParameterCommand,
+  PutParameterCommand
+} from "@aws-sdk/client-ssm";
 
-AWS.config.update({ region: process.env.AWS_REGION });
-const ssm = new AWS.SSM();
+const ssm = new SSMClient({ region: process.env.AWS_REGION! });
 const secretManager = new SecretManagerServiceClient();
 
 const writeFirebaseServiceAccount = async () => {
@@ -13,7 +16,7 @@ const writeFirebaseServiceAccount = async () => {
     Name: `/FirebaseMigrator/${FIREBASE_PROJECT_ID}/FirebaseServiceAccount`,
     WithDecryption: true
   };
-  const res = await ssm.getParameter(params).promise();
+  const res = await ssm.send(new GetParameterCommand(params));
   fs.writeFileSync("FirebaseServiceAccount.json", res.Parameter!.Value!);
 };
 
@@ -46,7 +49,7 @@ async function main() {
       Type: "SecureString"
     };
     console.log(`Writing ${parameterName} to SSM`);
-    return ssm.putParameter(params).promise();
+    return ssm.send(new PutParameterCommand(params));
   }));
 }
 

@@ -9,4 +9,5 @@ RUN \
   npm update -g npm && \
   npm install --no-package-lock
 COPY "*" ./
-ENTRYPOINT ["npx", "ts-node", "index.ts"]
+RUN npx tsc
+ENTRYPOINT ["node", "dist/index.js"]

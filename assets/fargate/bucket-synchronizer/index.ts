@@ -2,9 +2,18 @@ import fs from "fs";
 import http from "http";
 import { spawnSync } from "child_process";
 
-import AWS from "aws-sdk";
-const ssm = new AWS.SSM();
-const cfn = new AWS.CloudFormation();
+import {
+  SSMClient,
+  GetParameterCommand
+} from "@aws-sdk/client-ssm";
+
+import {
+  CloudFormationClient,
+  DescribeStacksCommand
+} from "@aws-sdk/client-cloudformation";
+
+const cfn = new CloudFormationClient({ region: process.env.AWS_REGION });
+const ssm = new SSMClient({ region: process.env.AWS_REGION });
 
 const getCredentials = (): Promise<{[k: string]: string}> =>
   new Promise((resolve, reject) => {
@@ -30,7 +39,9 @@ const writeFirebaseServiceAccount = async () => {
     Name: `/FirebaseMigrator/${FIREBASE_PROJECT_ID}/FirebaseServiceAccount`,
     WithDecryption: true
   };
-  const res = await ssm.getParameter(params).promise();
+  // const res = await ssm.getParameter(params).promise();
+  const cmd = new GetParameterCommand(params);
+  const res = await ssm.send(cmd);
   fs.writeFileSync("FirebaseServiceAccount.json", res.Parameter!.Value!);
 };
 
@@ -40,19 +51,24 @@ const getFirebaseAppConfig = async () => {
     Name: `/FirebaseMigrator/${FIREBASE_PROJECT_ID}/FirebaseAppConfig`,
     WithDecryption: true
   };
-  const res = await ssm.getParameter(params).promise();
+  // const res = await ssm.getParameter(params).promise();
+  const cmd = new GetParameterCommand(params);
+  const res = await ssm.send(cmd);
   return JSON.parse(res.Parameter!.Value!);
 };
 
-const getAwsConfig = async () =>
-  JSON.parse(((await cfn.describeStacks({
+const getAwsConfig = async () => {
+  const cmd = new DescribeStacksCommand({
     StackName: `${process.env.FIREBASE_PROJECT_ID}-ApiStack`
-  }).promise()).Stacks ?? [])
+  });
+  const res = await cfn.send(cmd);
+  return JSON.parse((res.Stacks ?? [])
     .map((stack) => (stack.Outputs ?? [])
       .find((output) => output.OutputKey! === "AmplifyConfigOutput"))
     .filter((it) => it)!
     .shift()!
     .OutputValue!);
+};
 
 const gcloudAuthenticate = async () => {
   const args = [
