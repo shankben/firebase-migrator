@@ -26,7 +26,8 @@ import {
   getMetaItem
 } from "./";
 
-const REGION = process.env.CDK_DEPLOY_REGION ??
+const REGION = process.env.AWS_REGION ??
+  process.env.CDK_DEPLOY_REGION ??
   process.env.CDK_DEFAULT_REGION ??
   "us-east-1";
 
@@ -250,8 +251,13 @@ async function introspectFacet(
     ExpressionAttributeValues: {":val": Converter.input(facet)},
     KeyConditionExpression: "#facet = :val"
   };
+  console.log(params);
+
   const res = await dynamodb.query(params).promise();
   const items = (res.Items ?? [] as AttributeMap[]);
+
+  console.log(items);
+
   const prototypeItem = items.reduce((x, y) => ({...x, ...y}), {});
   const itemKeys = new Set(Object.keys(prototypeItem));
   const requiredKeys = items
