@@ -5,6 +5,7 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "clean": "./scripts/clean.sh",
+    "watch": "npx tsc -w",
     "postinstall": "./scripts/post-install.sh"
   },
   "devDependencies": {

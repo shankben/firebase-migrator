@@ -32,9 +32,9 @@ import { Role, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { RetentionDays } from "@aws-cdk/aws-logs";
 
-import LambdaBaseLayer from "../constructs/LambdaBaseLayer";
-import Table from "../constructs/Table";
-import UserAuth from "../constructs/UserAuth";
+import LambdaBaseLayer from "../constructs/lambda-base-layer";
+import Table from "../constructs/table";
+import UserAuth from "../constructs/user-auth";
 
 import {
   PseudoGraphqlSchema,

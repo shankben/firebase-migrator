@@ -33,7 +33,7 @@ import {
   StringAttribute
 } from "@aws-cdk/aws-cognito";
 
-import LambdaBaseLayer from "./LambdaBaseLayer";
+import LambdaBaseLayer from "./lambda-base-layer";
 
 export interface UserAuthProps {
   bucket: Bucket;

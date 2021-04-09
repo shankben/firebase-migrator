@@ -7,9 +7,9 @@ import {
 
 import { Bucket, HttpMethods } from "@aws-cdk/aws-s3";
 
-import LambdaBaseLayer from "../constructs/LambdaBaseLayer";
-import Table from "../constructs/Table";
-import UserAuth from "../constructs/UserAuth";
+import LambdaBaseLayer from "../constructs/lambda-base-layer";
+import Table from "../constructs/table";
+import UserAuth from "../constructs/user-auth";
 
 export interface BaseStackProps extends StackProps {
   firebaseProjectId: string;

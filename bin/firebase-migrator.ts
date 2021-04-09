@@ -1,9 +1,9 @@
 import { App } from "@aws-cdk/core";
 
-import ApiStack from "../lib/stacks/ApiStack";
-import BaseStack from "../lib/stacks/BaseStack";
-import FirestoreSyncStack from "../lib/stacks/FirestoreSyncStack";
-import FirestoreListenerStack from "../lib/stacks/FirestoreListenerStack";
+import ApiStack from "../lib/stacks/api-stack";
+import BaseStack from "../lib/stacks/base-stack";
+import FirestoreSyncStack from "../lib/stacks/firestore-sync-stack";
+import FirestoreListenerStack from "../lib/stacks/firestore-listener-stack";
 
 import {
   ensureFirebaseCredentials,

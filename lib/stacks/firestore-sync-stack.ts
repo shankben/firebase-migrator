@@ -27,9 +27,9 @@ import { SqsEventSource } from "@aws-cdk/aws-lambda-event-sources";
 import { LogGroup, RetentionDays } from "@aws-cdk/aws-logs";
 import { Queue } from "@aws-cdk/aws-sqs";
 
-import LambdaBaseLayer from "../constructs/LambdaBaseLayer";
-import SyncMachineExecution from "../constructs/SyncMachineExecution";
-import Table from "../constructs/Table";
+import LambdaBaseLayer from "../constructs/lambda-base-layer";
+import SyncMachineExecution from "../constructs/sync-machine-execution";
+import Table from "../constructs/table";
 
 export interface FirestoreSyncStackProps extends StackProps {
   firebaseProjectId: string;
